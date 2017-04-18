@@ -13,12 +13,17 @@
 \usepackage{marginnote}
 \usepackage{tikz}
 \usepackage{parskip}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 
 \title{Prosort[49]\\Editorial}
 \author{Hanit Banga, Parth Mittal, Sattu Supari}
 
 \setcounter{secnumdepth}{1}
 \reversemarginpar
+
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
 
 % Better table padding
 \renewcommand{\arraystretch}{1.5}
@@ -29,7 +34,9 @@
 	\tableofcontents
 
 	\input{ps49a}
-    	\pagebreak
+	\pagebreak
+	\input{ps49b}
+	\pagebreak
 	\input{ps49c}
 	\pagebreak
 	\input{ps49d}
