@@ -1,0 +1,69 @@
+\section{Problem B}
+    \subsection{Statement}
+        Given integers $a$, $b$, and $m$, find $a^b \bmod m$
+
+    \subsection{Solution}
+        Since $b \leq 10^{18}$, we cannot use naive exponentiation.
+        There is a well known trick to do exponentiation in
+        $O(\log b)$ multiplications, we present it as is.
+
+        \begin{algorithm}[H]
+        \begin{algorithmic}[1]
+        \Function{mod-exp}{$a, b, m$}
+            \State $R \gets 1, C \gets a \bmod m$
+            \While{$b > 0$}
+                \If{$b \bmod 2 = 1$}
+                    \State $R \gets \left(R \times C\right) \bmod m$
+                \EndIf
+                \State $C \gets \left(C \times C\right) \bmod m$
+                \State $b \gets \floor*{\frac b2}$
+            \EndWhile
+        \EndFunction
+        \end{algorithmic}
+        \end{algorithm}
+
+        For a second, it looks like we are done here, look at lines
+        5 and 7 of the algorithm.
+        Since $R$ and $C$ are bounded only by $m$, they can be up to
+        $10^{18}$ before these multiplications are performed.
+        So the result of the multiplication does not fit in a 64-bit
+        integer type.
+
+        To encourage people to think about how to get around this, we
+        disallowed anything but C and C++ for this problem (and hoped
+        nobody knew about \verb|__int_128|).
+
+        (hint: note that multiplication is just repeated addition, like
+        exponentiation is repeated multiplication)
+
+        Rather cleverly, it turns out we can use the above algorithm as is,
+        just replacing the multiply bits with the addition, and setting
+        $R$ to 0 (the identity of addition) instead of $1$ (the identity
+        of multiplication).
+
+        \begin{algorithm}[H]
+        \begin{algorithmic}[1]
+        \Function{mod-mul}{$a, b, m$}
+            \State $R \gets 0, C \gets a \bmod m$
+            \While{$b > 0$}
+                \If{$b \bmod 2 = 1$}
+                    \State $R \gets \left(R + C\right) \bmod m$
+                \EndIf
+                \State $C \gets \left(C + C\right) \bmod m$
+                \State $b \gets \floor*{\frac b2}$
+            \EndWhile
+        \EndFunction
+        \end{algorithmic}
+        \end{algorithm}
+
+        This works fine, since $10^{18} + 10^{18}$ still fits within a 64-bit
+        integer type.
+        And of course, we replace lines 5 and 7 in the first algorithm with calls
+        to \textproc{mod-mul}, for an overall run-time of $O(\log b \times \log m)$
+        per test case, and $O(T \times \log b \times \log m)$ per test file.
+
+    \subsection{Comments}
+        Interestingly, this was the only semi-original problem in this ProSort
+        (yes, we are incredibly creative problem authors),
+        in that I learned this trick somewhere (cannot remember where $\ddot\smallfrown$)
+        and decided everybody should know it because reasons.
